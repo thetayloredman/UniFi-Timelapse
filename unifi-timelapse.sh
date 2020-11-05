@@ -81,7 +81,8 @@ createMovie()
     # try to fix
     temp="";
     for i in "$snapDir/"*.jpg; do
-      temp="$temp $i";
+      temp="$temp
+$i";
     done;
     echo "$temp" | sort > "$snapFileList"
   fi
