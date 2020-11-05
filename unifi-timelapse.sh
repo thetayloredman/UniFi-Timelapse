@@ -3,7 +3,7 @@
 #SNAP_BASE="/mnt/hgfs/Disk2/UniFi-Snaps"
 SNAP_BASE="/nas/data/Development/UniFi/TimeLapse/UniFi-Timelapse/UniFi-Snaps"
 OUT_DIR="$SNAP_BASE/timelapse"
-DATE_EXT=`date '+%F %H:%M'`
+DATE_EXT="$(date '+%F %H:%M')"
 
 declare -A CAMS
 
@@ -65,10 +65,10 @@ createMovie()
 
   if [ "$2" = "today" ]; then
     log "Creating video of $1 from today's images"
-    ls "$snapDir/"*`date '+%F'`*.jpg | sort > "$snapFileList"
+    ls "$snapDir/"*"$(date '+%F')"*.jpg | sort > "$snapFileList"
   elif [ "$2" = "yesterday" ]; then
     log "Creating video of $1 from yesterday's images"
-    ls "$snapDir/"*`date '+%F' -d "1 day ago"`*.jpg | sort > "$snapFileList"
+    ls "$snapDir/"*"$(date '+%F' -d "1 day ago")"*.jpg | sort > "$snapFileList"
   elif [ "$2" = "file" ]; then
     if [ ! -f "$3" ]; then
       logerr "ERROR file '$3' not found"
@@ -80,20 +80,21 @@ createMovie()
     log "Creating video of $1 from all images"
     # try to fix
     temp="";
-    for i in "$snapDir/"; do
+    for i in "$snapDir/"*.jpg; do
       temp="$temp $i";
     done;
     echo "$temp" | sort > "$snapFileList"
   fi
 
   # need to chance current dir so links work over network mounts
-  cwd=`pwd`
+  cwd="$(pwd)"
   cd "$snapTemp"
   x=1
   #for file in $snapSearch; do
   while IFS= read -r file; do
     counter=$(printf %06d $x)
-    ln -s "../`basename "$file"`" "./$counter.jpg"
+    # newer syntax
+    ln -s "../$(basename "$file")" "./$counter.jpg"
     x=$(($x+1))
   done < "$snapFileList"
   #done
