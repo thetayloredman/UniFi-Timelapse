@@ -55,6 +55,7 @@ getSnap() {
 
 createMovie()
 {
+  exho "initializing";
   snapDir="$SNAP_BASE/$1"
   snapTemp="$snapDir/temp-$DATE_EXT"
   snapFileList="$snapDir/temp-$DATE_EXT/files.list"
@@ -82,25 +83,32 @@ createMovie()
   else
     log "Creating video of $1 from all images"
     # try to fix
+    echo "recursing snapdir images"
     temp="";
     for i in "$snapDir/"*.jpg; do
+      echo "found $i"
       temp="$temp
 $i";
     done;
+    echo "finished recursing"
     echo "$temp" | sort > "$snapFileList"
   fi
 
   # need to chance current dir so links work over network mounts
+  echo "changing to snaptemp"
   cwd="$(pwd)"
   cd "$snapTemp"
   x=1
   #for file in $snapSearch; do
+  echo "while IFS= read -r file; do (idk what this means)"
   while IFS= read -r file; do
+    echo "loop hit iteration $x";
     counter=$(printf %06d $x)
     # newer syntax
     ln -s "../$(basename "$file")" "./$counter.jpg"
     x=$(($x+1))
   done < "$snapFileList"
+  echo "snap file list written"
   #done
 
   if [ $x -eq 1 ]; then
@@ -108,14 +116,19 @@ $i";
     exit 2
   fi
 
+  echo "making outdir";
   createDir "$OUT_DIR"
+  echo "making outfile"
   outfile="$OUT_DIR/$1 - $DATE_EXT.mp4"
 
+  echo "[CRITICAL] FFMPEG launched"
   ffmpeg -r 15 -start_number 1 -i "$snapTemp/"%06d.jpg -c:v libx264 -preset slow -crf 18 -c:a copy -pix_fmt yuv420p "$outfile" -hide_banner -loglevel panic
 
+  echo "[FINIS] finished ffmpeg";
   log "Created $outfile"
 
   cd $cwd
+  echo "done";
   rm -rf "$snapTemp"
   
 }
