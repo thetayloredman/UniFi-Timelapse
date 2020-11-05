@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# credit to logan devine he is very good he fixed
+# almost all of this messy code uwu
+
 #SNAP_BASE="/mnt/hgfs/Disk2/UniFi-Snaps"
 SNAP_BASE="/nas/data/Development/UniFi/TimeLapse/UniFi-Timelapse/UniFi-Snaps"
 OUT_DIR="$SNAP_BASE/timelapse"
