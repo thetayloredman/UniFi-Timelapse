@@ -78,7 +78,12 @@ createMovie()
     cp "$3" "$snapFileList"
   else
     log "Creating video of $1 from all images"
-    ls "$snapDir/"*.jpg | sort > "$snapFileList"
+    # try to fix
+    temp="";
+    for i in "$snapDir/"; do
+      temp="$temp $i";
+    done;
+    echo "$temp" | sort > "$snapFileList"
   fi
 
   # need to chance current dir so links work over network mounts
