@@ -84,10 +84,9 @@ createMovie()
     # try to fix
     temp="";
     for i in "$snapDir/"*.jpg; do
-      temp="$temp
-$i";
+      "$i" >> "$snapFileList";
     done;
-    echo "$temp" | sort > "$snapFileList"
+    cat "$snapFileList" | sort > "$snapFileList";
   fi
 
   # need to chance current dir so links work over network mounts
