@@ -4,16 +4,13 @@
 # almost all of this messy code uwu
 
 #SNAP_BASE="/mnt/hgfs/Disk2/UniFi-Snaps"
-SNAP_BASE="/nas/data/Development/UniFi/TimeLapse/UniFi-Timelapse/UniFi-Snaps"
+SNAP_BASE="/Users/logandevine/Desktop/today_timelapse"
 OUT_DIR="$SNAP_BASE/timelapse"
 DATE_EXT="$(date '+%F %H:%M')"
 
-declare -A CAMS
+declare -a CAMS
 
-CAMS["Front Door"]="http://192.1.1.1/snap.jpeg"
-CAMS["Back Door"]="http://192.1.1.2/snap.jpeg"
-CAMS["Driveway"]="http://192.1.1.3/snap.jpeg"
-CAMS["Back Garden"]="http://192.1.1.4/snap.jpeg"
+CAMS["Construction"]="http://192.1.1.4/snap.jpeg"
 
 # If we are in a terminal, be verbose.
 if [[ -z $VERBOSE && -t 1 ]]; then
@@ -60,7 +57,7 @@ createMovie()
   snapFileList="$snapDir/temp-$DATE_EXT/files.list"
   
   if [ ! -d "$snapDir" ]; then
-    logedd "Error : No media files in '$snapDir'"
+    logerr "Error : No media files in '$snapDir'"
     exit 2
   fi
 
@@ -84,9 +81,8 @@ createMovie()
     # try to fix
     temp="";
     for i in "$snapDir/"*.jpg; do
-      "$i" >> "$snapFileList";
-    done;
-    cat "$snapFileList" | sort > "$snapFileList";
+      echo "$i"
+    done > "$snapFileList";
   fi
 
   # need to chance current dir so links work over network mounts
