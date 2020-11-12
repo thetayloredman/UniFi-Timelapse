@@ -57,7 +57,7 @@ createMovie()
   snapFileList="$snapDir/temp-$DATE_EXT/files.list"
   
   if [ ! -d "$snapDir" ]; then
-    logedd "Error : No media files in '$snapDir'"
+    logerr "Error : No media files in '$snapDir'"
     exit 2
   fi
 
@@ -78,24 +78,12 @@ createMovie()
     cp "$3" "$snapFileList"
   else
     log "Creating video of $1 from all images"
-    for i in "$snapDir/"*.jpg; do
-        echo "$i"
-    done > "$snapFileList"
   fi
 
   # need to chance current dir so links work over network mounts
   cwd=`pwd`
-  cd "$snapTemp"
-  x=1
-  #for file in $snapSearch; do
-  while IFS= read -r file; do
-    counter=$(printf %06d $x)
-    ln -s "../`basename "$file"`" "./$counter.jpg"
-    x=$(($x+1))
-  done < "$snapFileList"
-  #done
 
-  if [ $x -eq 1 ]; then
+  if [ "$x" -eq 1 ]; then
     logerr "ERROR no files found"
     exit 2
   fi
@@ -103,13 +91,11 @@ createMovie()
   createDir "$OUT_DIR"
   outfile="$OUT_DIR/$1 - $DATE_EXT.mp4"
 
-  ffmpeg -r 15 -start_number 1 -i "$snapTemp/"%06d.jpg -c:v libx264 -preset slow -crf 18 -c:a copy -pix_fmt yuv420p "$outfile" -hide_banner -loglevel panic
+  ffmpeg -r 15 -start_number 1 -pattern_type glob -i "$snapDir/"'*.jpg' -c:v libx264 -preset ultrafast -c:a copy -pix_fmt yuv420p "$outfile" -hide_banner
 
   log "Created $outfile"
 
   cd $cwd
-  rm -rf "$snapTemp"
-  
 }
 
 
