@@ -64,20 +64,20 @@ createMovie()
 
   if [ "$2" = "today" ]; then
     log "Creating video of $1 from today's images"
-    ffmpeg -r 15 -start_number 1 -pattern_type glob -i "$snapDir/"'*'"$(date '+%F')"'*.jpg' -c:v libx264 -preset ultrafast -c:a copy -pix_fmt yuv420p "$outfile" -hide_banner
+    ffmpeg -r 15 -movflags faststart -start_number 1 -pattern_type glob -i "$snapDir/"'*'"$(date '+%F')"'*.jpg' -c:v libx264 -preset ultrafast -c:a copy -pix_fmt yuv420p "$outfile" -hide_banner
   elif [ "$2" = "yesterday" ]; then
     log "Creating video of $1 from yesterday's images"
-    ffmpeg -r 15 -start_number 1 -pattern_type glob -i "$snapDir/"'*'"$(date '+%F' -d "1 day ago")"'*.jpg' -c:v libx264 -preset ultrafast -c:a copy -pix_fmt yuv420p "$outfile" -hide_banner
+    ffmpeg -r 15 -movflags faststart -start_number 1 -pattern_type glob -i "$snapDir/"'*'"$(date '+%F' -d "1 day ago")"'*.jpg' -c:v libx264 -preset ultrafast -c:a copy -pix_fmt yuv420p "$outfile" -hide_banner
   elif [ "$2" = "file" ]; then
     if [ ! -f "$3" ]; then
       logerr "ERROR file '$3' not found"
       exit 1
     fi
     log "Creating video of $1 from images in $3"
-    ffmpeg -r 15 -start_number 1 -i "$(cat "$3")" -c:v libx264 -preset ultrafast -c:a copy -pix_fmt yuv420p "$outfile" -hide_banner
+    ffmpeg -r 15 -movflags faststart -start_number 1 -i "$(cat "$3")" -c:v libx264 -preset ultrafast -c:a copy -pix_fmt yuv420p "$outfile" -hide_banner
   else
     log "Creating video of $1 from all images"
-    ffmpeg -r 15 -start_number 1 -pattern_type glob -i "$snapDir/"'*.jpg' -c:v libx264 -preset ultrafast -c:a copy -pix_fmt yuv420p "$outfile" -hide_banner
+    ffmpeg -r 15 -movflags faststart -start_number 1 -pattern_type glob -i "$snapDir/"'*.jpg' -c:v libx264 -preset ultrafast -c:a copy -pix_fmt yuv420p "$outfile" -hide_banner
   fi
 
   # need to chance current dir so links work over network mounts
@@ -102,20 +102,20 @@ createMovieFPS()
 
   if [ "$2" = "today" ]; then
     log "Creating video of $1 from today's images"
-    ffmpeg -r "$4" -start_number 1 -pattern_type glob -i "$snapDir/"'*'"$(date '+%F')"'*.jpg' -c:v libx264 -preset ultrafast -c:a copy -pix_fmt yuv420p "$outfile" -hide_banner
+    ffmpeg -r "$4" -movflags faststart -start_number 1 -pattern_type glob -i "$snapDir/"'*'"$(date '+%F')"'*.jpg' -c:v libx264 -preset ultrafast -c:a copy -pix_fmt yuv420p "$outfile" -hide_banner
   elif [ "$2" = "yesterday" ]; then
     log "Creating video of $1 from yesterday's images"
-    ffmpeg -r "$4" -start_number 1 -pattern_type glob -i "$snapDir/"'*'"$(date '+%F' -d "1 day ago")"'*.jpg' -c:v libx264 -preset ultrafast -c:a copy -pix_fmt yuv420p "$outfile" -hide_banner
+    ffmpeg -r "$4" -movflags faststart -start_number 1 -pattern_type glob -i "$snapDir/"'*'"$(date '+%F' -d "1 day ago")"'*.jpg' -c:v libx264 -preset ultrafast -c:a copy -pix_fmt yuv420p "$outfile" -hide_banner
   elif [ "$2" = "file" ]; then
     if [ ! -f "$3" ]; then
       logerr "ERROR file '$3' not found"
       exit 1
     fi
     log "Creating video of $1 from images in $3"
-    ffmpeg -r "$4" -start_number 1 -i "$(cat "$3")" -c:v libx264 -preset ultrafast -c:a copy -pix_fmt yuv420p "$outfile" -hide_banner
+    ffmpeg -r "$4" -movflags faststart -start_number 1 -i "$(cat "$3")" -c:v libx264 -preset ultrafast -c:a copy -pix_fmt yuv420p "$outfile" -hide_banner
   else
     log "Creating video of $1 from all images"
-    ffmpeg -r "$4" -start_number 1 -pattern_type glob -i "$snapDir/"'*.jpg' -c:v libx264 -preset ultrafast -c:a copy -pix_fmt yuv420p "$outfile" -hide_banner
+    ffmpeg -r "$4" -movflags faststart -start_number 1 -pattern_type glob -i "$snapDir/"'*.jpg' -c:v libx264 -preset ultrafast -c:a copy -pix_fmt yuv420p "$outfile" -hide_banner
   fi
 
   # need to chance current dir so links work over network mounts
